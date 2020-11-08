@@ -15,7 +15,31 @@ function saveMatches(match) {
             return tx.complete;
         })
         .then(function() {
-            console.log("Match Saved Successfully!");
+            const title = "Match Saved Successfully!";
+            console.log(title);
+            const options = {
+                body: `${match.homeTeam.name} Vs ${match.awayTeam.name} match has been saved, Check it now!`,
+                badge: "./img/logo/logo32.png",
+                icon: "./img/logo/logo32.png",
+                actions: [{
+                        action: "yes-action",
+                        title: "Okey"
+                    },
+                    {
+                        action: "no-action",
+                        title: "Later"
+                    },
+                ],
+            };
+            if (Notification.permission === "granted") {
+                navigator.serviceWorker.ready.then(function(registration) {
+                    registration.showNotification(title, options);
+                });
+            } else {
+                M.toast({
+                    html: `${match.homeTeam.name} Vs ${match.awayTeam.name} match has been saved, Check it now!`,
+                });
+            }
         })
         .catch(function(err) {
             console.error('Failed to save Match', err);
