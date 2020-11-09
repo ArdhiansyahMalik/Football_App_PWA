@@ -26,12 +26,9 @@ function detailMatches(result) {
                                 Venue | <b><i> ${data.venue}</i></b>
                             </p>
                         </div>
-                        <div class="col s2">
-                            <a class="btn-floating pulse right blue darken-3" id="save-match">
-                                <i class="material-icons">star</i>
-                            </a>
-                            <a class="btn-floating pulse right red darken-3 hide" id="delete-match" data-id="${data.id}">
-                                <i class="material-icons">delete</i>
+                        <div class="col s2" id="button-act">
+                            <a class="btn-floating pulse right blue darken-3">
+                                <i class="material-icons" id="save-button">star</i>
                             </a>
                         </div>
                     </div>
@@ -74,14 +71,7 @@ function detailMatches(result) {
                                 <b><i> ${data.venue}</i></b>
                             </p>
                         </div>
-                        <div class="col s3">
-                        <a class="btn-floating pulse right blue darken-3" id="save-match1">
-                            <i class="material-icons">star</i>
-                        </a>
-                        <a class="btn-floating pulse right red darken-3 hide" id="delete-match1" data-id="${data.id}">
-                            <i class="material-icons">delete</i>
-                        </a>
-                        </div>
+                        <div class="col s3" id="button-act"></div>
                     </div>
                     <div class="col s12" style="margin: 20px 0px; border: 1px solid #bdbdbd; border-radius: 3px; padding: 20px 0px;">
                         <div class="col s12 center" style="margin: 20px 0px;">
@@ -103,39 +93,27 @@ function detailMatches(result) {
                 </div>
             `;
     document.getElementById("body-content").innerHTML = detailmatchHTML;
+    savdelMatch(data);
 }
 
-async function clickButtonEventListener() {
-    const item = await getMatchById();
-    console.log(item)
-    try {
-        // Save Match
-        $('#body-content').on("click", '#save-match, #save-match1', function() {
-            $('#save-match').addClass('hide');
-            $('#save-match1').addClass('hide');
-            $('#delete-match').removeClass('hide');
-            $('#delete-match1').removeClass('hide');
-            console.log("Tombol Save di klik!!!");
-            saveMatches(item.match);
-        });
-        // Delete Match
-        document.querySelectorAll("#delete-match").forEach(function(elm) {
-            elm.addEventListener("click", (event) => {
-                let id = event.target.parentElement.getAttribute("data-id");
-                console.log(id);
-                id = parseInt(id);
-                deleteMatch(id);
-                setTimeout(() => {
-                    location.reload();
-                }, 10);
-                $('#delete-match').addClass('hide');
-                $('#delete-match1').addClass('hide');
-                $('#save-match').removeClass('hide');
-                $('#save-match1').removeClass('hide');
-                console.log("Tombol Delete di klik!!!");
-            })
-        })
-    } catch {
-        console.error('Failed to Add this Match', error);
+async function savdelMatch(data) {
+    const button = document.getElementById('button-act');
+
+    if (await getMatch(data.id)) {
+        button.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
     }
+
+    button.addEventListener('click', async() => {
+        if (await getMatch(data.id)) {
+            deleteMatch(parseInt(data.id));
+            alert('match has been deleted!');
+
+            button.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
+            console.log('Tombol Delete di klik!');
+        } else {
+            saveMatches(data);
+            button.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+            console.log('Tombol Save di klik!');
+        }
+    })
 }

@@ -46,6 +46,23 @@ function saveMatches(match) {
         });
 }
 
+function getMatch(id) {
+    return new Promise(function(resolve, reject) {
+        dbPromised
+            .then(function(db) {
+                let tx = db.transaction("saved", "readonly");
+                let store = tx.objectStore("saved");
+                return store.get(id);
+            })
+            .then(function(matches) {
+                resolve(matches);
+            })
+            .catch(function(err) {
+                reject('Cannot display saved matches', err);
+            });
+    });
+}
+
 function getMatches() {
     return new Promise(function(resolve, reject) {
         dbPromised
@@ -70,26 +87,5 @@ function deleteMatch(id) {
             let store = tx.objectStore("saved");
             store.delete(id);
             return tx.complete;
-        })
-        .then(function() {
-            const title = "Match has been Deleted!";
-            console.log(title);
-            const options = {
-                body: `${match.homeTeam.name} Vs ${match.awayTeam.name} match has been deleted!`,
-                badge: "./img/logo/logo32.png",
-                icon: "./img/logo/logo32.png",
-            };
-            if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(function(registration) {
-                    registration.showNotification(title, options);
-                });
-            } else {
-                M.toast({
-                    html: `${match.homeTeam.name} Vs ${match.awayTeam.name} match has been deleted!`,
-                });
-            }
-        })
-        .catch(() => {
-            console.error("Can`t delete this match");
         })
 }
