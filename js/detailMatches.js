@@ -26,7 +26,7 @@ function detailMatches(result) {
                                 Venue | <b><i> ${data.venue}</i></b>
                             </p>
                         </div>
-                        <div class="col s2" id="button-act">
+                        <div class="col s2" id="button-act1">
                             <a class="btn-floating pulse right blue darken-3">
                                 <i class="material-icons" id="save-button">star</i>
                             </a>
@@ -71,7 +71,11 @@ function detailMatches(result) {
                                 <b><i> ${data.venue}</i></b>
                             </p>
                         </div>
-                        <div class="col s3" id="button-act"></div>
+                        <div class="col s3" id="button-act2">
+                            <a class="btn-floating pulse right blue darken-3">
+                                <i class="material-icons" id="save-button">star</i>
+                            </a>
+                        </div>
                     </div>
                     <div class="col s12" style="margin: 20px 0px; border: 1px solid #bdbdbd; border-radius: 3px; padding: 20px 0px;">
                         <div class="col s12 center" style="margin: 20px 0px;">
@@ -97,22 +101,39 @@ function detailMatches(result) {
 }
 
 async function savdelMatch(data) {
-    const button = document.getElementById('button-act');
+    const button1 = document.getElementById('button-act1');
+    const button2 = document.getElementById('button-act2');
 
     if (await getMatch(data.id)) {
-        button.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+        button1.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+        button2.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
     }
 
-    button.addEventListener('click', async() => {
+    button1.addEventListener('click', async() => {
         if (await getMatch(data.id)) {
             deleteMatch(parseInt(data.id));
             alert('match has been deleted!');
-
-            button.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
             console.log('Tombol Delete di klik!');
+            button1.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
+            button2.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
         } else {
             saveMatches(data);
-            button.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+            button1.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+            button2.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+            console.log('Tombol Save di klik!');
+        }
+    })
+    button2.addEventListener('click', async() => {
+        if (await getMatch(data.id)) {
+            deleteMatch(parseInt(data.id));
+            alert('match has been deleted!');
+            console.log('Tombol Delete di klik!');
+            button1.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
+            button2.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
+        } else {
+            saveMatches(data);
+            button1.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
+            button2.innerHTML = `<a class="btn-floating pulse right red darken-3"><i class="material-icons" id="delete-button">delete</i></a>`;
             console.log('Tombol Save di klik!');
         }
     })

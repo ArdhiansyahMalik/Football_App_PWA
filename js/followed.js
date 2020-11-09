@@ -100,9 +100,10 @@ function detailSavedMatches(result) {
             console.log(id);
             id = parseInt(id);
             deleteMatch(id);
+            alert('match has been deleted!');
             setTimeout(() => {
                 location.reload();
-            }, 10);
+            }, 1);
         })
     })
 }
