@@ -1,4 +1,4 @@
-const CACHE_NAME = "FA-v0.1";
+const CACHE_NAME = "FA-v0.2";
 
 var urlsToCache = [
     "/",
@@ -112,4 +112,25 @@ self.addEventListener("push", function(event) {
     event.waitUntil(
         self.registration.showNotification('Push Notification', options)
     );
+});
+
+// Mengatasi event click 
+self.addEventListener('notificationclick', function(event) {
+    if (!event.action) {
+        // Pengguna mengklik notifikasi di luar action
+        console.log('Notification Click');
+        return;
+    }
+
+    switch (event.action) {
+        case 'yes-action':
+            console.log('Let`s check match followed!');
+            clients.openWindow('/#followed');
+            break;
+        case 'no-action':
+            break;
+        default:
+            console.log('I`m fine.');
+            break;
+    }
 });
