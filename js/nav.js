@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Active sidebar nav
-    var elems = document.querySelectorAll(".sidenav");
+    const elems = document.querySelectorAll(".sidenav");
     M.Sidenav.init(elems);
     loadNav();
 
     function loadNav() {
-        var xhttp = new XMLHttpRequest();
+        let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status != 200) return;
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function loadPage(page) {
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4) {
+            if (this.readyState === 4) {
                 let content = document.querySelector("#body-content");
                 if (this.status === 200) {
                     content.innerHTML = xhttp.responseText;
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else if (page === "followed") {
                         getSavedMatches();
                     }
-                } else if (this.status == 404) {
+                } else if (this.status === 404) {
                     content.innerHTML = "<p>Halaman tidak ditemukan.</p>";
                 } else {
                     content.innerHTML = "<p>Ups.. Halaman tidak dapat diakses</p>"

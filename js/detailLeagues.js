@@ -1,5 +1,5 @@
 function detailLeagues(data) {
-    if (data.season.winner == null) {
+    if (data.season.winner === null) {
         winner = "<i>Wait for the league to finish</i>"
     } else {
         winner = data.season.winner
@@ -157,10 +157,10 @@ function listMatches(result) {
     data.forEach(data => {
         matchesHTML += `
                     <tr>
-                        <td style="padding: 0px;">
+                        <td>
                             <div class="card horizontal hoverable hide-on-small-only" style="padding: 20px 0; border-radius: 10px;">
                                 <div class="col s5">
-                                    <img src="https://crests.football-data.org/${data.homeTeam.id}.svg" height="80" alt="${data.homeTeam.name}">
+                                    <img src="https://crests.football-data.org/${data.homeTeam.id}.svg" height="80" alt="${data.homeTeam.name}" />
                                     <h6>
                                         <b>${data.homeTeam.name}</b>
                                     </h6>
@@ -175,7 +175,7 @@ function listMatches(result) {
                                     </span>
                                 </div>
                                 <div class="col s5">
-                                    <img src="https://crests.football-data.org/${data.awayTeam.id}.svg" height="80" alt="${data.awayTeam.name}">
+                                    <img src="https://crests.football-data.org/${data.awayTeam.id}.svg" height="80" alt="${data.awayTeam.name}" />
                                     <h6>
                                         <b>${data.awayTeam.name}</b>
                                     </h6>
@@ -185,7 +185,7 @@ function listMatches(result) {
 
                             <div class="card horizontal hoverable hide-on-med-and-up" style="padding: 20px 0; border-radius: 10px;">
                                 <div class="col s5">
-                                    <img src="https://crests.football-data.org/${data.homeTeam.id}.svg" height="25">
+                                    <img src="https://crests.football-data.org/${data.homeTeam.id}.svg" height="25" alt="${data.homeTeam.name}" />
                                     <span>
                                         <p><b>${data.homeTeam.name}</b><p>
                                         <small>HOME</small>
@@ -235,3 +235,8 @@ function listScorers(result) {
     })
     document.getElementById("scorers-detail").innerHTML = playersHTML;
 }
+
+// Menampilkan Detail Liga berdasarkan ID
+document.addEventListener("DOMContentLoaded", function() {
+    getLeagueById();
+});
