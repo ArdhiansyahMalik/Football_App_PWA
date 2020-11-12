@@ -68,12 +68,12 @@ function detailTeams(result) {
             position = data.position;
         }
         squad += `
-                    <tr>
-                        <td>${data.name}</td>
-                        <td>${position}</td>
-                        <td>${data.nationality}</td>
-                    </tr>
-                `;
+            <tr>
+                <td>${data.name}</td>
+                <td>${position}</td>
+                <td>${data.nationality}</td>
+            </tr>
+        `;
     })
     document.getElementById("squad-list").innerHTML = squad;
 }

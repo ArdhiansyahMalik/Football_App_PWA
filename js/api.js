@@ -1,5 +1,24 @@
-let base_url = "https://api.football-data.org/v2/";
+// Ambil nilai query parameter (?id=)
+let urlParams = new URLSearchParams(window.location.search);
+let idParam = urlParams.get("id");
+
 const api_token = "90254dfb2c894138bbb9284f1a00799f";
+const base_url = `https://api.football-data.org/v2/`;
+const leagues = `${base_url}competitions?plan=TIER_ONE&areas=2077`;
+const standings = `${base_url}competitions/${idParam}/standings`;
+const matches = `${base_url}competitions/${idParam}/matches?status=SCHEDULED`;
+const scorers = `${base_url}competitions/${idParam}/scorers`;
+const teams = `${base_url}teams/${idParam}`;
+const matches_byID = `${base_url}matches/${idParam}`;
+let url = "";
+
+const fetchApi = function(url) {
+    return fetch(url, {
+        headers: {
+            'X-Auth-Token': api_token
+        }
+    })
+};
 
 function status(response) {
     if (response.status !== 200) {
@@ -19,126 +38,122 @@ function error(error) {
 }
 
 function getLeagues() {
+    // Inisialisasi endpoint
+    url = leagues;
+
     if ('caches' in window) {
-        caches.match(base_url + "competitions?plan=TIER_ONE&areas=2077").then(function(response) {
+        caches.match(url).then((response) => {
             if (response) {
-                response.json().then(function(data) {
+                response.json().then((data) => {
                     dataLeagues(data);
                 });
             }
         });
     }
-    fetch(base_url + "competitions?plan=TIER_ONE&areas=2077", {
-            headers: {
-                "X-Auth-Token": api_token
-            }
-        })
+
+    fetchApi(url)
         .then(status)
         .then(json)
-        .then(function(data) {
+        .then((data) => {
             dataLeagues(data);
         })
         .catch(error);
 }
 
 function getLeagueById() {
-    // Ambil nilai query parameter (?id=)
-    let urlParams = new URLSearchParams(window.location.search);
-    let idParam = urlParams.get("id");
-
     if ('caches' in window) {
-        caches.match(base_url + "competitions/" + idParam + "/standings").then(function(response) {
+        caches.match(url = standings).then((response) => {
             if (response) {
-                response.json().then(function(data) {
+                response.json().then((data) => {
                     detailLeagues(data);
                 });
             }
         });
     }
     if ('caches' in window) {
-        caches.match(base_url + "competitions/" + idParam + "/matches?status=SCHEDULED").then(function(response) {
+        caches.match(url = matches).then((response) => {
             if (response) {
-                response.json().then(function(data) {
+                response.json().then((data) => {
                     listMatches(data);
                 });
             }
         });
     }
     if ('caches' in window) {
-        caches.match(base_url + "competitions/" + idParam + "/scorers").then(function(response) {
+        caches.match(url = scorers).then((response) => {
             if (response) {
-                response.json().then(function(data) {
+                response.json().then((data) => {
                     listScorers(data);
                 });
             }
         });
     }
-    fetch(base_url + "competitions/" + idParam + "/standings", {
+
+    fetch(url = standings, {
             headers: {
                 "X-Auth-Token": api_token
             }
         })
         .then(status)
         .then(json)
-        .then(function(data) {
+        .then((data) => {
             detailLeagues(data);
         });
-    fetch(base_url + "competitions/" + idParam + "/matches?status=SCHEDULED", {
+    fetch(url = matches, {
             headers: {
                 "X-Auth-Token": api_token
             }
         })
         .then(status)
         .then(json)
-        .then(function(data) {
+        .then((data) => {
             listMatches(data);
         })
-    fetch(base_url + "competitions/" + idParam + "/scorers", {
+    fetch(url = scorers, {
             headers: {
                 "X-Auth-Token": api_token
             }
         })
         .then(status)
         .then(json)
-        .then(function(data) {
+        .then((data) => {
             listScorers(data);
         });
 }
 
 function getTeamsById() {
-    let urlParams = new URLSearchParams(window.location.search);
-    let idParam = urlParams.get("id");
+    // Inisialisasi url
+    url = teams;
 
     if ('caches' in window) {
-        caches.match(base_url + "teams/" + idParam).then(function(response) {
+        caches.match(url).then((response) => {
             if (response) {
-                response.json().then(function(data) {
+                response.json().then((data) => {
                     detailTeams(data);
                 });
             }
         });
     }
-    fetch(base_url + "teams/" + idParam, {
-            headers: {
-                "X-Auth-Token": api_token
-            }
-        })
+
+    fetchApi(url)
         .then(status)
         .then(json)
-        .then(function(data) {
+        .then((data) => {
             detailTeams(data);
         })
 }
 
 function getMatchById() {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         let urlParams = new URLSearchParams(window.location.search);
         let idParam = urlParams.get("id");
+        // Inisialisasi url
+        url = matches_byID;
 
         if ('caches' in window) {
-            caches.match(base_url + "matches/" + idParam).then(function(response) {
+            caches.match(url).then((response) => {
                 if (response) {
-                    response.json().then(function(data) {
+                    response.json().then((data) => {
                         detailMatches(data);
                         resolve(data);
                     });
@@ -146,14 +161,10 @@ function getMatchById() {
             });
         }
 
-        fetch(base_url + "matches/" + idParam, {
-                headers: {
-                    "X-Auth-Token": api_token
-                }
-            })
+        fetchApi(url)
             .then(status)
             .then(json)
-            .then(function(data) {
+            .then((data) => {
                 detailMatches(data);
                 resolve(data);
             });
@@ -161,7 +172,7 @@ function getMatchById() {
 }
 
 function getSavedMatches() {
-    getMatches().then(function(data) {
+    getMatches().then((data) => {
         console.log(data);
         detailSavedMatches(data);
     });

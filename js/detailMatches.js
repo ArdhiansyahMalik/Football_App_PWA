@@ -112,7 +112,6 @@ async function savdelMatch(data) {
     button1.addEventListener('click', async() => {
         if (await getMatch(data.id)) {
             deleteMatch(parseInt(data.id));
-            alert('match has been deleted!');
             console.log('Tombol Delete di klik!');
             button1.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
             button2.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
@@ -126,7 +125,6 @@ async function savdelMatch(data) {
     button2.addEventListener('click', async() => {
         if (await getMatch(data.id)) {
             deleteMatch(parseInt(data.id));
-            alert('match has been deleted!');
             console.log('Tombol Delete di klik!');
             button1.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
             button2.innerHTML = `<a class="btn-floating pulse right blue darken-3"><i class="material-icons" id="save-button">star</i></a>`;
@@ -138,3 +136,8 @@ async function savdelMatch(data) {
         }
     })
 }
+
+// Menampilkan Detail Match berdasarkan ID
+document.addEventListener("DOMContentLoaded", function() {
+    getMatchById();
+});

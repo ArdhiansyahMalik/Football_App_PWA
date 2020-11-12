@@ -94,7 +94,7 @@ function detailSavedMatches(result) {
 
     document.getElementById("followed").innerHTML = savedmatchesHTML;
 
-    document.querySelectorAll("#delete-match").forEach(function(elm) {
+    document.querySelectorAll("#delete-match").forEach((elm) => {
         elm.addEventListener("click", (event) => {
             let id = event.target.parentElement.getAttribute("data-id");
             console.log(id);
