@@ -1,4 +1,10 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js');
+
+workbox.core.setCacheNameDetails({
+    prefix: 'Custom',
+    suffix: 'v1',
+    precache: 'FA',
+})
 
 if (workbox) {
     console.log('Workbox berhasil dimuat!');
@@ -18,6 +24,7 @@ workbox.precaching.precacheAndRoute([
     { url: '/pages/followed.html', revision: '1' },
     { url: '/css/materialize.min.css', revision: '1' },
     { url: '/js/materialize.min.js', revision: '1' },
+    { url: '/js/jquery-3.5.1.min.js', revision: '1' },
     { url: '/js/nav.js', revision: '1' },
     { url: '/js/leagues.js', revision: '1' },
     { url: '/js/detailLeagues.js', revision: '1' },
@@ -49,18 +56,45 @@ workbox.precaching.precacheAndRoute([
     { url: '/img/flags/2003.svg', revision: '1' },
     { url: '/img/flags/2014.svg', revision: '1' },
     { url: '/img/flags/2015.svg', revision: '1' },
-    { url: '/img/flags/2021.svg', revision: '1' }
-    // { url: 'https://fonts.googleapis.com/icon?family=Material+Icons', revision: '1' },
-    // { url: 'https://fonts.gstatic.com/s/materialicons/v67/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2', revision: '1' },
-]);
+    { url: '/img/flags/2021.svg', revision: '1' },
+    { url: 'https://fonts.googleapis.com/icon?family=Material+Icons', revision: '1' },
+    { url: 'https://fonts.gstatic.com/s/materialicons/v67/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2', revision: '1' },
+    { url: 'https://fonts.gstatic.com/s/materialicons/v67/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2', revision: '1' },
+], {
+    ignoreUrlParametersMatching: [/.*/],
+});
+
+workbox.routing.registerRoute(new RegExp('/'),
+    async({
+        event
+    }) => {
+        return await workbox.strategies.networkFirst({
+            cacheName: 'Football-App',
+            plugins: [
+                new workbox.expiration.Plugin({
+                    maxEntries: 60,
+                    maxAgeSeconds: 30 * 24 * 60 * 60, // 30 hari
+                }),
+            ],
+        }).handle({
+            event
+        });
+    }
+);
 
 workbox.routing.registerRoute(
-    new RegExp('https://api-football-data.org/v2/'),
-    new workbox.strategies.StaleWhileRevalidate({
+    new RegExp('https://api.football-data.org/v2/'),
+    workbox.strategies.staleWhileRevalidate({
         cacheName: 'data-api-football',
+    })
+);
+
+workbox.routing.registerRoute(
+    new RegExp('https://fonts.googleapis.com/icon?family=Material+Icons'),
+    workbox.strategies.staleWhileRevalidate({
+        cacheName: 'material-icons',
         plugins: [
             new workbox.expiration.Plugin({
-                maxEntries: 100,
                 maxAgeSeconds: 30 * 24 * 60 * 60, // 30 hari
             }),
         ],
@@ -68,12 +102,13 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
+    new RegExp('/img/'),
     /\.(?:png|jpg|jpeg|svg)$/,
     workbox.strategies.cacheFirst({
-        cacheName: 'img',
+        cacheName: 'img-assets',
         plugins: [
             new workbox.expiration.Plugin({
-                maxEntries: 150,
+                maxEntries: 80,
                 maxAgeSeconds: 30 * 24 * 60 * 60, // 30 hari
             }),
         ],
@@ -81,69 +116,16 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-    /\.(?:js|css)$/,
-    new workbox.strategies.StaleWhileRevalidate({
-        cacheName: 'static-file'
+    new RegExp('/pages/'),
+    workbox.strategies.staleWhileRevalidate({
+        cacheName: 'pages',
+        plugins: [
+            new workbox.expiration.Plugin({
+                maxAgeSeconds: 365 * 24 * 60 * 60, // 30 hari
+            }),
+        ],
     })
 );
-
-workbox.routing.registerRoute(
-    new RegExp('/pages'),
-    new workbox.strategies.StaleWhileRevalidate({
-        cacheName: 'pages'
-    })
-);
-
-// const CACHE_NAME = "FA-v0.4";
-
-// const urlsToCache = [
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "/",
-//     "",
-//     ""
-// ];
-
 
 // self.addEventListener("install", function(event) {
 //     event.waitUntil(

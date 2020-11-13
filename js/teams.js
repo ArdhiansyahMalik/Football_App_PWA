@@ -77,3 +77,8 @@ function detailTeams(result) {
     })
     document.getElementById("squad-list").innerHTML = squad;
 }
+
+// Menampilkan Detail Liga berdasarkan ID
+document.addEventListener("DOMContentLoaded", function() {
+    getTeamsById();
+});
