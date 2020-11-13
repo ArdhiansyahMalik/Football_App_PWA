@@ -1,5 +1,6 @@
 Firebase:
-https://football-app-b60c1.web.app
+https://football-app-b60c1.web.app/
+
 
 Netlify:
 https://bal-balan.netlify.app/
