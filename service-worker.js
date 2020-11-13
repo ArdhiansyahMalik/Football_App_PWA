@@ -1,5 +1,5 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
-const CACHE_NAME = "FA-v0.2";
+const CACHE_NAME = "FA-v0.4";
 
 const urlsToCache = [
     "/",

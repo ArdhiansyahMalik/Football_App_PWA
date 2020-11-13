@@ -55,6 +55,12 @@
             "sizes": "72x72",
             "type": "image/png",
             "purpose": "any maskable"
+        },
+        {
+            "src": "img/logo/logo32.png",
+            "sizes": "32x32",
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ]
 }
