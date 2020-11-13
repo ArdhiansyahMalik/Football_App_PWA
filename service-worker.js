@@ -26,7 +26,7 @@ workbox.precaching.precacheAndRoute([
     { url: '/js/followed.js', revision: '1' },
     { url: '/js/api.js', revision: '1' },
     { url: '/js/idb.js', revision: '1' },
-    { url: '/js/db.js', revision: '1' },
+    { url: '/js/db.js', revision: '2' },
     { url: '/js/reg-sw.js', revision: '1' },
     { url: '/img/club.png', revision: '1' },
     { url: '/img/logo/logo.png', revision: '1' },

@@ -66,4 +66,9 @@ function deleteMatch(id) {
             store.delete(id);
             return tx.complete;
         })
+        .then(() => {
+            M.toast({
+                html: `match has been deleted!`,
+            });
+        })
 }
