@@ -103,7 +103,6 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
     new RegExp('/img/'),
-    /\.(?:png|jpg|jpeg|svg)$/,
     workbox.strategies.cacheFirst({
         cacheName: 'img-assets',
         plugins: [
