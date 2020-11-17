@@ -31,6 +31,10 @@ workbox.precaching.precacheAndRoute([{
         revision: '1'
     },
     {
+        url: '/offline.html',
+        revision: '1'
+    },
+    {
         url: '/manifest.json',
         revision: '1'
     },
@@ -196,11 +200,23 @@ workbox.precaching.precacheAndRoute([{
     },
 ]);
 
+self.addEventListener("install", function(event) {
+    const url = ['/offline.html'];
+    const cacheName = workbox.core.cacheNames.runtime;
+    event.waitUntil(
+        caches.open(cacheName).then(function(cache) {
+            return cache.addAll(url);
+        })
+    );
+});
+
+const url = ['/offline.html'];
+
 workbox.routing.registerRoute(new RegExp('/'),
     async({
         event
     }) => {
-        return await workbox.strategies.staleWhileRevalidate({
+        return await workbox.strategies.networkFirst({
             cacheName: 'Football-App',
             plugins: [
                 new workbox.expiration.Plugin({
